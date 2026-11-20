@@ -47,7 +47,7 @@ This is identical to 2-opt SA, but the 'step' is a random 3-opt move (redrawn op
 
 ### Lin-Kernighan
 
-This is a fiendishly complex heuristic algorithm developed by Shen Lin and Brian Kernighan, which is very effective at finding near-optimal solutions to the TSP. I will not go into details here - the implementation is based on the variable-depth edge-exchange approach described in the original [https://www.cs.princeton.edu/~bwk/btl.mirror/tsp.pdf](Lin-Kernighan Paper).
+This is a fiendishly complex heuristic algorithm developed by Shen Lin and Brian Kernighan, which is very effective at finding near-optimal solutions to the TSP. I will not go into details here - the implementation is based on the variable-depth edge-exchange approach described in the original [Lin-Kernighan paper](https://www.cs.princeton.edu/~bwk/btl.mirror/tsp.pdf).
 Broadly speaking, it can be thought of as a $k$-opt algorithm, which adaptively chooses the depth of its edge exchanges based on whether they can produce an improvement. This was by far the trickiest algorithm to implement.
 
 # Visualisations
