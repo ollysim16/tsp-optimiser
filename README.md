@@ -47,7 +47,7 @@ This is identical to 2-opt SA, but the 'step' is a random 3-opt move (redrawn op
 
 ### Lin-Kernighan
 
-This is a fiendishly complex heuristic algorithm developed by Shen Lin and Brian Kernighan, which is very effective at finding near-optimal solutions to the TSP. I will not go into details here - the implementation is based on the variable-depth edge-exchange approach described in the original [[https://www.cs.princeton.edu/~bwk/btl.mirror/tsp.pdf|Lin-Kernighan paper]].
+This is a fiendishly complex heuristic algorithm developed by Shen Lin and Brian Kernighan, which is very effective at finding near-optimal solutions to the TSP. I will not go into details here - the implementation is based on the variable-depth edge-exchange approach described in the original [https://www.cs.princeton.edu/~bwk/btl.mirror/tsp.pdf](Lin-Kernighan Paper).
 Broadly speaking, it can be thought of as a $k$-opt algorithm, which adaptively chooses the depth of its edge exchanges based on whether they can produce an improvement. This was by far the trickiest algorithm to implement.
 
 # Visualisations
@@ -55,13 +55,13 @@ Broadly speaking, it can be thought of as a $k$-opt algorithm, which adaptively 
 I used the matplotlib library to visualise the five algorithms at work, to give a better idea of how they operate. 
 
 ### 2-opt:
-![2-opt animation](assets/LK.gif)
+![2-opt animation](assets/2-opt.gif)
 ### 3-opt:
-![3-opt animation](assets/LK.gif)
+![3-opt animation](assets/3-opt.gif)
 ### 2-opt SA:
-![2-opt SA animation](assets/LK.gif)
+![2-opt SA animation](assets/SA2.gif)
 ### 3-opt SA:
-![3-opt SA animation](assets/LK.gif)
+![3-opt SA animation](assets/SA3.gif)
 ### Lin-Kernighan:
 ![Lin-Kernighan animation](assets/LK.gif)
 
