@@ -1,5 +1,9 @@
 import random
 import math
+import time
+
+import matplotlib
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import numpy as np
@@ -10,6 +14,8 @@ from copy import deepcopy
 def edge(one, two):
     return distance_matrix[one, two]
 
+def mean(lst):
+    return sum(lst)/len(lst)
 
 def dist(cycle):
     total = 0
@@ -135,15 +141,6 @@ def generate_move_to(state):
 
 # ---------------------------------------------- ALGORITHMS ------------------------------------------------------------
 def gd():
-    print("Running 2-opt...")
-
-    def update(frame):
-        x_points = [city_coords[x][0] for x in history[frame]] + [city_coords[history[frame][0]][0]]
-        y_points = [city_coords[y][1] for y in history[frame]] + [city_coords[history[frame][0]][1]]
-        line.set_data(x_points, y_points)
-        text.set_text(f"2-opt\n"
-                         f"Distance: {dist(history[frame])}")
-        return line,
 
     history = [tour.copy()]
 
@@ -162,6 +159,16 @@ def gd():
         if lowest_delta < 0:
             moved = True
             history.append(best_state.copy())
+    return history
+
+def animate_gd(history):
+    def update(frame):
+        x_points = [city_coords[x][0] for x in history[frame]] + [city_coords[history[frame][0]][0]]
+        y_points = [city_coords[y][1] for y in history[frame]] + [city_coords[history[frame][0]][1]]
+        line.set_data(x_points, y_points)
+        text.set_text(f"2-opt\n"
+                         f"Distance: {dist(history[frame])}")
+        return line,
 
     fig, ax = plt.subplots()
     fig.canvas.manager.window.geometry("+50+50")
@@ -183,15 +190,6 @@ def gd():
 
 
 def to():
-    def update(frame):
-        x_points = [city_coords[x][0] for x in history[frame]] + [city_coords[history[frame][0]][0]]
-        y_points = [city_coords[y][1] for y in history[frame]] + [city_coords[history[frame][0]][1]]
-        line.set_data(x_points, y_points)
-        text.set_text(f"3-opt\n"
-                         f"Distance: {dist(history[frame])}")
-        return line,
-
-    print("Running 3-opt...")
     history = [tour.copy()]
 
     no_move = 0
@@ -202,8 +200,19 @@ def to():
             history.append(next_state.copy())
             no_move = 0
 
+    return history
+
+def animate_to(history):
+    def update(frame):
+        x_points = [city_coords[x][0] for x in history[frame]] + [city_coords[history[frame][0]][0]]
+        y_points = [city_coords[y][1] for y in history[frame]] + [city_coords[history[frame][0]][1]]
+        line.set_data(x_points, y_points)
+        text.set_text(f"3-opt\n"
+                         f"Distance: {dist(history[frame])}")
+        return line,
+
     fig, ax = plt.subplots()
-    fig.canvas.manager.window.geometry("+50+650")
+    fig.canvas.manager.window.geometry("+650+50")
     ax.scatter([city_coords[x][0] for x in tour], [city_coords[y][1] for y in tour], color='hotpink', zorder=5)
     line, = ax.plot([city_coords[x][0] for x in tour],
                           [city_coords[y][1] for y in tour], 'purple')
@@ -222,14 +231,6 @@ def to():
 
 
 def sa():
-    def update(frame):
-        x_points = [city_coords[x][0] for x in ani_history[frame]] + [city_coords[ani_history[frame][0]][0]]
-        y_points = [city_coords[y][1] for y in ani_history[frame]] + [city_coords[ani_history[frame][0]][1]]
-        line.set_data(x_points, y_points)
-        text.set_text(f"Simulated Annealing (2-opt)\n"
-                         f"Distance: {dist(ani_history[frame])}")
-        return line,
-
     def initialise_temp_sa():
         state, = history
         c = 0
@@ -243,7 +244,6 @@ def sa():
         avg_bad_move_delta = sum(bad_move_deltas) / len(bad_move_deltas)
         return -avg_bad_move_delta / math.log(initial_probability)
 
-    print("Running 2-opt simulated annealing...")
     history = [tour.copy()]
     initial_probability = 0.9
     t = t0 = initialise_temp_sa()
@@ -268,6 +268,16 @@ def sa():
                 proposed_moves = 0
                 accepted_moves = 0
         t *= 0.999
+    return history
+
+def animate_sa(history):
+    def update(frame):
+        x_points = [city_coords[x][0] for x in ani_history[frame]] + [city_coords[ani_history[frame][0]][0]]
+        y_points = [city_coords[y][1] for y in ani_history[frame]] + [city_coords[ani_history[frame][0]][1]]
+        line.set_data(x_points, y_points)
+        text.set_text(f"Simulated Annealing (2-opt)\n"
+                      f"Distance: {dist(ani_history[frame])}")
+        return line,
 
     frames = 200
     ani_frames = np.linspace(0, len(history) - 1, frames, dtype=int)
@@ -293,14 +303,6 @@ def sa():
 
 
 def sato():
-    def update(frame):
-        x_points = [city_coords[x][0] for x in ani_history_sato[frame]] + [city_coords[ani_history_sato[frame][0]][0]]
-        y_points = [city_coords[y][1] for y in ani_history_sato[frame]] + [city_coords[ani_history_sato[frame][0]][1]]
-        line.set_data(x_points, y_points)
-        text.set_text(f"Simulated Annealing (3-opt)\n"
-                           f"Distance: {dist(ani_history_sato[frame])}")
-        return line,
-
     def initialise_temp_sato():
         state, = history
         c = 0
@@ -313,7 +315,6 @@ def sato():
         avg_bad_move_delta = sum(bad_move_deltas) / len(bad_move_deltas)
         return -avg_bad_move_delta / math.log(initial_probability)
 
-    print("Running 3-opt simulated annealing...")
     history = [tour.copy()]
 
     initial_probability = 0.9
@@ -338,6 +339,16 @@ def sato():
                 proposed_moves = 0
                 accepted_moves = 0
         t *= 0.999
+    return history
+
+def animate_sato(history):
+    def update(frame):
+        x_points = [city_coords[x][0] for x in ani_history_sato[frame]] + [city_coords[ani_history_sato[frame][0]][0]]
+        y_points = [city_coords[y][1] for y in ani_history_sato[frame]] + [city_coords[ani_history_sato[frame][0]][1]]
+        line.set_data(x_points, y_points)
+        text.set_text(f"Simulated Annealing (3-opt)\n"
+                      f"Distance: {dist(ani_history_sato[frame])}")
+        return line,
 
     frames = 200
     ani_frames_sato = np.linspace(0, len(history) - 1, frames, dtype=int)
@@ -365,14 +376,6 @@ def sato():
 def lk():
     neighbours = 6
     max_depth = 5
-
-    def update(frame):
-        x_points = [city_coords[x][0] for x in history[frame]] + [city_coords[history[frame][0]][0]]
-        y_points = [city_coords[y][1] for y in history[frame]] + [city_coords[history[frame][0]][1]]
-        line.set_data(x_points, y_points)
-        text.set_text(f"Lin-Kernighan\n"
-                      f"Distance: {dist(history[frame])}")
-        return line,
 
     def edge_exists(a, b, cities_dict):
         if a in cities_dict[b]:
@@ -456,7 +459,6 @@ def lk():
                 if depth < max_depth:
                     recurse(t_final, deepcopy(cities_dict), visited.copy(), g_i, depth+1)
 
-    print("Running Lin-Kernighan...")
     history = [tour.copy()]
     cities = {}
     for i, city in enumerate(history[-1]):
@@ -476,11 +478,20 @@ def lk():
                 cities[city] = [history[-1][i - 1], history[-1][(i + 1) % CITIES]]
         else:
             cities = close_edge(cities)
-
+    return history
     # ---------------------------------------- ANIMATION ------------------------------------------
 
+def animate_lk(history):
+    def update(frame):
+        x_points = [city_coords[x][0] for x in history[frame]] + [city_coords[history[frame][0]][0]]
+        y_points = [city_coords[y][1] for y in history[frame]] + [city_coords[history[frame][0]][1]]
+        line.set_data(x_points, y_points)
+        text.set_text(f"Lin-Kernighan\n"
+                      f"Distance: {dist(history[frame])}")
+        return line,
+
     fig, ax = plt.subplots()
-    fig.canvas.manager.window.geometry("+1550+50")
+    fig.canvas.manager.window.geometry("+1350+50")
     ax.scatter([city_coords[x][0] for x in tour], [city_coords[y][1] for y in tour], color='hotpink', zorder=5)
 
     line, = ax.plot([city_coords[x][0] for x in tour + [tour[0]]],
@@ -497,22 +508,66 @@ def lk():
                          repeat=False)
 
 
-CITIES = 100
-ANIMATION_TIME = 1 * 1000
+CITIES_LIST = [10, 25, 50, 75, 100]
+ANIMATION_TIME = 1
+ANIMATION_TIME *= 1000
+ITERATIONS = 10
+
+init_lengths = []
+gd_lengths = []
+to_lengths = []
+sa_lengths = []
+sato_lengths = []
+lk_lengths = []
+
+gd_times = []
+to_times = []
+sa_times = []
+sato_times = []
+lk_times = []
+
+for CITIES in CITIES_LIST:
+    for _ in tqdm(range(ITERATIONS)):
+        city_coords = np.random.rand(CITIES, 2) * 100
+        distance_matrix = np.linalg.norm(city_coords[None] - city_coords[:, None], axis=2)
+        nearest_list = [sorted([x for x in range(CITIES) if x != i], key=lambda y: edge(y, i)) for i in range(CITIES)]
+        tour = list(range(CITIES))
+
+        start = time.perf_counter()
+        gd_h = gd()
+        break_1 = time.perf_counter()
+        to_h = to()
+        break_2 = time.perf_counter()
+        sa_h = sa()
+        break_3 = time.perf_counter()
+        sato_h = [sato()[-1]]
+        break_4 = time.perf_counter()
+        lk_h = lk()
+        end = time.perf_counter()
+
+        init_lengths.append(dist(tour))
+        gd_lengths.append(dist(gd_h[-1]))
+        to_lengths.append(dist(to_h[-1]))
+        sa_lengths.append(dist(sa_h[-1]))
+        sato_lengths.append(dist(sato_h[-1]))
+        lk_lengths.append(dist(lk_h[-1]))
+
+        gd_times.append(break_1 - start)
+        to_times.append(break_2 - break_1)
+        sa_times.append(break_3 - break_2)
+        sato_times.append(break_4 - break_3)
+        lk_times.append(end - break_4)
+
+    print(
+        CITIES, "\n",
+        mean(init_lengths), mean(gd_lengths), mean(to_lengths), mean(sa_lengths), mean(sato_lengths), mean(lk_lengths),
+        "\n", mean(gd_times), mean(to_times), mean(sa_times), mean(sato_times), mean(lk_times))
+
+def animate_all():
+    animations = [
+        animate_lk(lk_h),
 
 
-city_coords = np.random.rand(CITIES, 2) * 100
-distance_matrix = np.linalg.norm(city_coords[None] - city_coords[:, None], axis=2)
-nearest_list = [sorted([x for x in range(CITIES) if x != i], key=lambda y: edge(y, i)) for i in range(CITIES)]
+                  ]
 
-tour = list(range(CITIES))
-
-gd = gd()
-to = to()
-sa = sa()
-sato = sato()
-lk = lk()
-
-
-plt.show()
-
+    plt.show()
