@@ -19,12 +19,16 @@ The Travelling Salesman Problem (TSP) is an incredibly famous combinatorial opti
 
 This is one of the simplest TSP heuristics. Very simply, it picks two edges, and if redrawing the edges improves the solution, it proceeds as such.
 
-![[Pasted image 20261120130641.png|439]]
+![2-Opt](assets/2-opt.jpg)
 My implementation greedily iterates over every pair of edges and then switches the two which shorten the tour the most. It halts once no more such moves are possible.
 
 ### 3-opt
 
-This is similar to 2-opt, but instead of picking a pair of edges, it picks a group of three, and deletes all three of these edges. There are now 8 distinct ways (including the original) to redraw these to preserve the property of being a complete tour. My implementation randomly generates groups of three edges, and finds the way to redraw these (out of the possible 8) which minimises the total tour distance. It repeats this random selection until no improvements have been made in the last 20,000 attempted moves.
+This is similar to 2-opt, but instead of picking a pair of edges, it picks a group of three, and deletes all three of these edges. There are now 8 distinct ways (including the original) to redraw these to preserve the property of being a complete tour. 
+
+![3-Opt](assets/3-opt.png)
+
+My implementation randomly generates groups of three edges, and finds the way to redraw these (out of the possible 8) which minimises the total tour distance. It repeats this random selection until no improvements have been made in the last 20,000 attempted moves.
 
 ### 2-Opt Simulated Annealing
 
@@ -36,6 +40,8 @@ e^{-\Delta E/T} & \Delta E \geq 0 \end{cases}$$
 Where $T$ is the current temperature, and $\Delta E$ is the change in objective function produced by the current step.
 
 The algorithm then slowly 'cools' the temperature, which has the effect of accepting fewer unproductive moves. It is founded in the hope that a slow cooling schedule allows greater exploration of solution space, and increases the probability that the algorithm finishes at a global minimum.
+
+![SA](assets/SA.png)
 
 I will leave out the details of implementation in this README, but it is very similar to how I implemented SA in my `rastrigin-optimiser` project.
 
