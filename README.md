@@ -11,7 +11,7 @@
 
 # Overview
 
-The Travelling Salesman Problem (TSP) is an incredibly famous combinatorial optimisation problem. Given a set of points ("cities"), the problem is to find the shortest route which visits all cities and returns to the first. With $n$ cities and symmetry considered, the number of possible tours is $\frac{(n-1)!}{2}$, and so a brute force approach has factorial complexity and is infeasible with any significant number of cities. The TSP is NP-hard, meaning that finding an optimal solution is at least as computationally difficult as solving any problem in NP. No polynomial-time algorithm for solving it exactly is currently known (unless P = NP). However, there are many *heuristic* algorithms which attempt to find a very good (not necessarily optimal) solution in a fraction of the time it would take to brute force. This project implements five of these:
+The Travelling Salesman Problem (TSP) is a famous classic combinatorial optimisation problem: Given a set of points ("cities"), the problem is to find the shortest route which visits all cities and returns to the first. With $n$ cities and symmetry considered, the number of possible tours is $\frac{(n-1)!}{2}$, and so a brute force approach has factorial complexity and is infeasible with any significant number of cities. The TSP is NP-hard, meaning that finding an optimal solution is at least as computationally difficult as solving any problem in NP. No polynomial-time algorithm for solving it exactly is currently known (unless P = NP). However, there are many *heuristic* algorithms which attempt to find a very good (not necessarily optimal) solution in a fraction of the time it would take to brute force. This project implements five of these:
 
 # Algorithms
 
